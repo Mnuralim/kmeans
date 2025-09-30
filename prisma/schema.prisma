@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @unique @default(uuid())
+  username  String
+  password  String
+  role      ROLE
+  isActive  Boolean   @default(true)
+  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+enum ROLE {
+  ADMIN
+  HEAD_MASTER
+}
+
+model AcademicYear {
+  id           String         @id @unique @default(uuid())
+  year         String         @unique
+  startDate    DateTime       @map("tanggal_mulai")
+  endDate      DateTime       @map("tanggal_selesai")
+  isActive     Boolean        @default(false)
+  isCurrent    Boolean        @default(false)
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  students     Student[]
+  EducationFee EducationFee[]
+
+  @@map("tahun_akademik")
+}
+
+model Student {
+  id                String             @id @unique @default(uuid())
+  name              String             @map("nama")
+  nis               String             @map("nis")
+  nisn              String             @map("nisn")
+  grade             String             @map("kelas")
+  nextGrade         String?            @map("kelas_berikutnya")
+  birthDate         DateTime           @map("tanggal_lahir")
+  academicYearId    String             @map("id_tahun_akademik")
+  educationFeeId    String             @map("id_spp")
+  isActive          Boolean            @default(true)
+  deletedAt         DateTime?
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  educationFee      EducationFee       @relation(fields: [educationFeeId], references: [id])
+  academicYear      AcademicYear       @relation(fields: [academicYearId], references: [id])
+  payments          Payment[]
+  clusteringResults ClusteringResult[]
+
+  @@map("siswa")
+}
+
+model EducationFee {
+  id             String       @id @unique @default(uuid())
+  academicYearId String       @map("id_tahun_akademik")
+  fee            Float        @map("biaya")
+  isActive       Boolean      @default(true)
+  deletedAt      DateTime?
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id])
+  students       Student[]
+
+  @@map("spp")
+}
+
+model Payment {
+  id            String        @id @unique @default(uuid())
+  studentId     String        @map("id_siswa")
+  paymentNumber String        @map("nomor_pembayaran")
+  totalAmount   Float         @map("jumlah_pembayaran")
+  paymentDate   DateTime?     @map("tanggal_pembayaran")
+  dueDate       DateTime      @map("tanggal_jatuh_tempo")
+  academicYear  String?       @map("tahun_akademik")
+  month         String        @map("bulan")
+  year          String        @map("tahun")
+  status        PaymentStatus @map("status_pembayaran")
+  isActive      Boolean       @default(true)
+  deletedAt     DateTime?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  student       Student       @relation(fields: [studentId], references: [id])
+
+  @@map("pembayaran")
+}
+
+enum PaymentStatus {
+  LUNAS
+  BELUM_BAYAR
+}
+
+model ClusteringHistory {
+  id                String             @id @unique @default(uuid())
+  name              String             @map("nama")
+  description       String?            @map("deskripsi")
+  fileName          String             @map("nama_file")
+  totalStudents     Int                @map("jumlah_siswa")
+  maxIterations     Int                @map("maksimal_iterasi")
+  actualIterations  Int                @map("iterasi_aktual")
+  isConverged       Boolean            @map("konvergen")
+  status            ClusteringStatus   @map("status")
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  clusteringData    Json               @map("data_clustering")
+  clusteringResults ClusteringResult[]
+
+  @@map("riwayat_clustering")
+}
+
+model ClusteringResult {
+  id                  String  @id @unique @default(uuid())
+  clusteringHistoryId String  @map("id_clustering_history")
+  studentId           String? @map("id_siswa")
+  studentName         String  @map("nama_siswa")
+  nis                 String  @map("nis")
+  grade               Int     @map("kelas")
+  spp                 Int     @map("spp")
+  monthlyPayments     Json    @map("pembayaran_bulanan")
+  clusterIndex        Int     @map("indeks_cluster")
+  clusterLabel        String  @map("label_cluster")
+  centroids           Json    @map("centroids") // [120.5, 140.2, 180.7]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  clusteringHistory ClusteringHistory @relation(fields: [clusteringHistoryId], references: [id], onDelete: Cascade)
+  student           Student?          @relation(fields: [studentId], references: [id])
+
+  @@index([clusteringHistoryId, clusterIndex])
+  @@map("hasil_clustering")
+}
+
+enum ClusteringStatus {
+  COMPLETED
+  FAILED
+  PROCESSING
+}
