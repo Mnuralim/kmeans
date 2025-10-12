@@ -130,12 +130,13 @@ export function getCurrentAcademicYearString(): string {
 }
 
 export const calculateDaysDifference = (
-  paymentDate: string,
-  dueDate: string
+  paymentDate: string | Date,
+  dueDate: string | Date
 ) => {
   if (!paymentDate || !dueDate) return null;
   const payment = new Date(paymentDate);
   const due = new Date(dueDate);
+
   const diffInMs = payment.getTime() - due.getTime();
   return Math.round(diffInMs / (1000 * 60 * 60 * 24));
 };

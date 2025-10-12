@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { logOut } from "@/actions/auth";
+import Image from "next/image";
 
 interface SidebarProps {
   className?: string;
@@ -212,11 +213,15 @@ export function Sidebar({ className = "", username, role }: SidebarProps) {
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between h-16 px-6 border-b border-slate-100">
-            <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm font-medium">YW</span>
-              </div>
-              <h1 className="text-lg font-semibold text-slate-800">
+            <div className="flex items-center gap-3 mt-10 justify-center">
+              <Image
+                width={60}
+                height={60}
+                src={"/logo_YWKA.png"}
+                alt="logo"
+                className="object-fill"
+              />
+              <h1 className="text-sm font-semibold text-slate-800">
                 SD SWASTA YWKA MEDAN
               </h1>
             </div>

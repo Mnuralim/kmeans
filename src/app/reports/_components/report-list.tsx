@@ -40,8 +40,8 @@ export const ReportList = ({
   const [showExportOptions, setShowExportOptions] = useState(false);
 
   const getStatusBadge = (payment: {
-    paymentDate: string | null;
-    dueDate?: string | null;
+    paymentDate: string | null | Date;
+    dueDate?: string | null | Date;
     status: "LUNAS" | "BELUM_BAYAR";
   }) => {
     if (!payment || payment.status === "BELUM_BAYAR") {

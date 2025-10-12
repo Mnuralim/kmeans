@@ -21,7 +21,6 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
     getAllAcademicYears(),
     getCurrentAcademicYearWithId(),
   ]);
-
   return (
     <div className="bg-white border border-slate-200 shadow-sm rounded-lg">
       <div className="px-6 py-6 border-b border-slate-100 bg-slate-50">

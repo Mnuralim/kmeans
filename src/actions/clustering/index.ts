@@ -83,7 +83,11 @@ async function processCsvFile(
     let hasHeaderValidated = false;
 
     Readable.from(csvString)
-      .pipe(csv())
+      .pipe(
+        csv({
+          skipLines: 5,
+        })
+      )
       .on("headers", (headers: string[]) => {
         csvHeaders = headers;
 
@@ -160,6 +164,12 @@ export async function submitClustering(
     const month1 = formData.get("month1") as string;
     const month2 = formData.get("month2") as string;
     const month3 = formData.get("month3") as string;
+
+    console.log({
+      month1,
+      month2,
+      month3,
+    });
 
     if (!file) {
       return { success: false, message: "File not found in form data" };

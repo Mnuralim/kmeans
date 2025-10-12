@@ -73,25 +73,30 @@ export async function updateEducationFee(
 ): Promise<FormState> {
   try {
     const id = formData.get("id") as string;
-    const academicYear = formData.get("academicYear") as string;
+    const academicYearId = formData.get("academicYear") as string;
     const fee = formData.get("educationFee") as string;
 
-    if (!id || !academicYear || !fee) {
+    if (!id || !academicYearId || !fee) {
       return {
         error: "Semua field harus diisi",
       };
     }
 
-    const isValidAcademicYear = /^\d{4}\/\d{4}$/.test(academicYear);
-    if (!isValidAcademicYear) {
+    const academicYear = await prisma.academicYear.findUnique({
+      where: {
+        id:academicYearId
+      }
+    })
+
+    if(!academicYear) {
       return {
-        error: "Format tahun akademik tidak valid",
-      };
+        error: "Tahun akademik tidak ditemukan"
+      }
     }
 
     const existingAcademicYear = await prisma.educationFee.findFirst({
       where: {
-        academicYearId: academicYear,
+        academicYearId: academicYearId,
         isActive: true,
       },
     });
@@ -107,7 +112,7 @@ export async function updateEducationFee(
         id,
       },
       data: {
-        academicYearId: academicYear,
+        academicYearId: academicYearId,
         fee: parseFloat(fee),
       },
     });

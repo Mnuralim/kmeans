@@ -17,8 +17,8 @@ export type PaymentData = ClusteringDataset & {
   educationFee: number;
   payments: {
     [month: string]: {
-      paymentDate: string | null;
-      dueDate?: string | null;
+      paymentDate: string | null | Date;
+      dueDate?: string | null | Date;
       status: "LUNAS" | "BELUM_BAYAR";
     };
   };
@@ -142,10 +142,8 @@ export async function getAllReports(
       const monthName = getAcademicMonthName(monthIndex ?? 0);
 
       paymentsMap[monthName] = {
-        paymentDate: payment.paymentDate
-          ? payment.paymentDate.toLocaleString()
-          : null,
-        dueDate: payment.dueDate ? payment.dueDate.toLocaleString() : null,
+        paymentDate: payment.paymentDate ? payment.paymentDate : null,
+        dueDate: payment.dueDate ? payment.dueDate : null,
         status: payment.status,
       };
     });
