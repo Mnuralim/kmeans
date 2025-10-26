@@ -2,7 +2,7 @@
 import type { PaymentData } from "@/actions/reports";
 import { calculateDaysDifference, formatDate } from "@/lib/utils";
 import React, { useState } from "react";
-import type { AcademicYear } from "@prisma/client";
+import type { AcademicYear, ROLE } from "@prisma/client";
 import { ReportFilterControl } from "./filter-controll";
 import { CheckCircle, Clock, XCircle } from "lucide-react";
 import { Modal } from "@/app/_components/modal";
@@ -12,6 +12,7 @@ interface Props {
   academicYears: AcademicYear[];
   selectedAcademicYear?: string;
   currentSortOrder?: string;
+  role: ROLE;
 }
 
 const months = [
@@ -34,6 +35,7 @@ export const ReportList = ({
   academicYears,
   selectedAcademicYear,
   currentSortOrder,
+  role,
 }: Props) => {
   const [startMonth, setStartMonth] = useState(0);
   const [endMonth, setEndMonth] = useState(11);
@@ -203,12 +205,14 @@ export const ReportList = ({
         <h1 className="text-xl font-bold">
           Laporan Periode {selectedAcademicYear}
         </h1>
-        <button
-          onClick={handleExport}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Export Detail CSV
-        </button>
+        {role === "HEAD_MASTER" ? null : (
+          <button
+            onClick={handleExport}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Export Detail CSV
+          </button>
+        )}
       </div>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">

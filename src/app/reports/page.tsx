@@ -2,6 +2,7 @@ import { getAllReports } from "@/actions/reports";
 import { ReportList } from "./_components/report-list";
 import { getAllAcademicYears } from "@/actions/academic-years";
 import { getCurrentAcademicYearWithId } from "@/lib/utils";
+import { getSession } from "@/actions/session";
 
 interface ReportsPageProps {
   searchParams: Promise<{
@@ -15,6 +16,7 @@ interface ReportsPageProps {
 
 export default async function ReportsPage({ searchParams }: ReportsPageProps) {
   const { academicYear, grade, search, sortBy, sortOrder } = await searchParams;
+  const session = await getSession();
 
   const [{ data }, academicYears, currentYearAcademic] = await Promise.all([
     getAllReports(academicYear, grade, search, sortBy, sortOrder),
@@ -38,6 +40,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
 
       <div className="p-6">
         <ReportList
+          role={session!.role}
           currentSortOrder={sortOrder}
           data={data}
           academicYears={academicYears}

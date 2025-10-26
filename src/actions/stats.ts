@@ -12,7 +12,11 @@ export const getStats = unstable_cache(
       });
 
       const [totalStudents, activeStudents] = await Promise.all([
-        prisma.student.count(),
+        prisma.student.count({
+          where: {
+            isActive: true,
+          },
+        }),
         prisma.student.count({ where: { isActive: true } }),
       ]);
 

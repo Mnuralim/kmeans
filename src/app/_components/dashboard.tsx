@@ -22,6 +22,7 @@ import {
   Bar,
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface StatsData {
   totalStudents: number;
@@ -115,6 +116,7 @@ const ChartCard = ({
 );
 
 export const DashboardStats = ({ stats }: DashboardStatsProps) => {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-slate-50 ">
       <div className="p-6 lg:p-8">
@@ -129,7 +131,7 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
           <StatCard
             title="Total Siswa"
             value={stats.totalStudents.toLocaleString()}
-            subtitle={`${stats.activeStudents} siswa aktif`}
+            subtitle={`siswa aktif`}
             icon={Users}
             color="blue"
           />
@@ -269,7 +271,10 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
 
           <ChartCard title="Aksi Cepat">
             <div className="space-y-3">
-              <button className="w-full flex items-center justify-between p-3 text-left bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors duration-200">
+              <button
+                onClick={() => router.push("/payments")}
+                className="w-full flex items-center cursor-pointer justify-between p-3 text-left bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors duration-200"
+              >
                 <div className="flex items-center">
                   <UserCheck className="w-4 h-4 text-blue-600 mr-3" />
                   <span className="text-sm font-medium text-slate-700">
@@ -277,7 +282,10 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
                   </span>
                 </div>
               </button>
-              <button className="w-full flex items-center justify-between p-3 text-left bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors duration-200">
+              <button
+                onClick={() => router.push("/clustering")}
+                className="w-full flex items-center cursor-pointer justify-between p-3 text-left bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors duration-200"
+              >
                 <div className="flex items-center">
                   <BarChart3 className="w-4 h-4 text-green-600 mr-3" />
                   <span className="text-sm font-medium text-slate-700">
@@ -285,7 +293,10 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
                   </span>
                 </div>
               </button>
-              <button className="w-full flex items-center justify-between p-3 text-left bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors duration-200">
+              <button
+                onClick={() => router.push("/students")}
+                className="w-full flex items-center cursor-pointer justify-between p-3 text-left bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors duration-200"
+              >
                 <div className="flex items-center">
                   <Users className="w-4 h-4 text-orange-600 mr-3" />
                   <span className="text-sm font-medium text-slate-700">
@@ -293,7 +304,10 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
                   </span>
                 </div>
               </button>
-              <button className="w-full flex items-center justify-between p-3 text-left bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors duration-200">
+              <button
+                onClick={() => router.push("/reports")}
+                className="w-full flex items-center cursor-pointer justify-between p-3 text-left bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors duration-200"
+              >
                 <div className="flex items-center">
                   <AlertTriangle className="w-4 h-4 text-red-600 mr-3" />
                   <span className="text-sm font-medium text-slate-700">

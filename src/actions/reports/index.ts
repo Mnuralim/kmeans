@@ -138,7 +138,7 @@ export async function getAllReports(
     });
 
     payments.forEach((payment) => {
-      const monthIndex = payment.paymentDate?.getMonth();
+      const monthIndex = payment.dueDate?.getMonth();
       const monthName = getAcademicMonthName(monthIndex ?? 0);
 
       paymentsMap[monthName] = {

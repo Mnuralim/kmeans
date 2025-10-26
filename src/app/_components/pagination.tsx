@@ -53,10 +53,10 @@ export function Pagination({
     const skip = (page - 1) * itemsPP;
 
     params.set("skip", skip.toString());
-    params.set("limit", itemsPP.toString());
+    params.set("take", itemsPP.toString());
 
     Object.entries(preserveParams).forEach(([key, value]) => {
-      if (key === "skip" || key === "limit") return;
+      if (key === "skip" || key === "take") return;
       if (value !== undefined && value !== null && value !== "") {
         params.set(key, value.toString());
       } else {
