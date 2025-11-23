@@ -4,7 +4,7 @@ import { Modal } from "@/app/_components/modal";
 import { Tabel, type TabelColumn } from "@/app/_components/tabel";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import type { AcademicYear, Payment, Prisma } from "@prisma/client";
-import { Check, Printer } from "lucide-react";
+import { Check } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { ConfirmForm } from "./confirm-form";
@@ -113,15 +113,6 @@ export const PaymentDetail = ({
           >
             <Check className="w-4 h-4" />
           </button>
-          <form className="inline-block">
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center w-8 h-8 rounded-md cursor-pointer bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed border border-blue-200"
-              title="Hapus Data"
-            >
-              <Printer className="w-4 h-4" />
-            </button>
-          </form>
         </div>
       ),
     },

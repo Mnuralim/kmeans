@@ -17,7 +17,6 @@ import {
   Calendar,
   DollarSign,
   UserPlus,
-  TrendingUp,
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
@@ -139,12 +138,12 @@ export function Sidebar({ className = "", username, role }: SidebarProps) {
       href: "/settings",
       role: ["ADMIN", "HEAD_MASTER"],
     },
-    {
-      name: "Upgrade",
-      icon: <TrendingUp className="w-5 h-5" />,
-      href: "/upgrades",
-      role: ["ADMIN", "HEAD_MASTER"],
-    },
+    // {
+    //   name: "Upgrade",
+    //   icon: <TrendingUp className="w-5 h-5" />,
+    //   href: "/upgrades",
+    //   role: ["ADMIN", "HEAD_MASTER"],
+    // },
   ];
 
   const dataSubItems = [

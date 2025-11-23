@@ -2,6 +2,8 @@
 import { KMeans, type Cluster } from "@/lib/kmeans2";
 import prisma from "@/lib/prisma";
 import csv from "csv-parser";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { Readable } from "stream";
 
 interface FormState {
@@ -376,7 +378,7 @@ export async function getClusteringDetails(
           id: `cluster-${clusterIndex}`,
           clusterIndex,
           label: result.clusterLabel,
-          centroids: result.centroids as number[], // JSON field
+          centroids: result.centroids as number[],
           monthKeys: monthKeys,
           totalPoints: 0,
           clusteringResults: [],
@@ -391,8 +393,8 @@ export async function getClusteringDetails(
         nis: result.nis,
         grade: result.grade,
         spp: result.spp,
-        monthlyPayments: result.monthlyPayments as Record<string, number>, // JSON field
-        centroids: result.centroids as number[], // JSON field
+        monthlyPayments: result.monthlyPayments as Record<string, number>,
+        centroids: result.centroids as number[],
         monthKeys: monthKeys,
         clusterLabel: result.clusterLabel,
         clusterIndex: result.clusterIndex,
@@ -429,17 +431,14 @@ export async function deleteClusteringHistory(clusteringHistoryId: string) {
     await prisma.clusteringHistory.delete({
       where: { id: clusteringHistoryId },
     });
-
-    return {
-      success: true,
-      message: "Riwayat clustering berhasil dihapus",
-    };
   } catch (error) {
     console.error("Error deleting clustering history:", error);
-    return {
-      success: false,
-      message: "Gagal menghapus riwayat clustering",
-      error,
-    };
+    redirect(
+      "/results?error=1&message=Terjadi kesalahan saat menghapus riwayat clustering"
+    );
   }
+
+  revalidatePath("/results");
+  revalidatePath("/");
+  redirect("/results?success=1&message=Riwayat clustering berhasil dihapus");
 }

@@ -3,6 +3,8 @@
 import type { ClusteringHistory } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { Trash2 } from "lucide-react";
+import { deleteClusteringHistory } from "@/actions/clustering";
 
 interface Props {
   sessions: ClusteringHistory[];
@@ -24,12 +26,14 @@ export const ListResult = ({ sessions }: Props) => {
           <div className="space-y-4">
             {sessions.map((session) => (
               <div
-                onClick={() => router.push(`/results/${session.id}`)}
                 key={session.id}
-                className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition"
+                className="border rounded-lg p-4 hover:bg-gray-50 transition"
               >
                 <div className="flex justify-between items-start">
-                  <div className="flex-1">
+                  <div
+                    onClick={() => router.push(`/results/${session.id}`)}
+                    className="flex-1 cursor-pointer"
+                  >
                     <h3 className="font-semibold text-lg">{session.name}</h3>
                     {session.description && (
                       <p className="text-gray-600 text-sm mt-1">
@@ -56,6 +60,21 @@ export const ListResult = ({ sessions }: Props) => {
                     >
                       {session.status}
                     </span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const confirmed = confirm(
+                          `Apakah Anda yakin ingin menghapus "${session.name}"?\n\nData clustering ini akan dihapus permanen.`
+                        );
+                        if (confirmed) {
+                          deleteClusteringHistory(session.id);
+                        }
+                      }}
+                      className="p-2 hover:bg-red-50 rounded-lg transition-colors group"
+                      title="Hapus"
+                    >
+                      <Trash2 className="w-5 h-5 text-gray-400 cursor-pointer group-hover:text-red-500 transition-colors" />
+                    </button>
                   </div>
                 </div>
               </div>

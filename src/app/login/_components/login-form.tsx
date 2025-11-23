@@ -12,7 +12,6 @@ export const LoginForm = () => {
   });
   return (
     <div className="flex-1 bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col">
-      {/* Header dengan gradient */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-10"></div>
         <div className="relative p-8 pb-6">
@@ -36,7 +35,6 @@ export const LoginForm = () => {
         </div>
       </div>
 
-      {/* Form */}
       <div className="flex-1 px-8 pb-8 mt-5">
         <Form action={action} className="space-y-5">
           <ErrorMessage message={error.error} />
